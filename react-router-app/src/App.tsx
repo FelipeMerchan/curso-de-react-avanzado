@@ -5,6 +5,9 @@ import { Settings } from "./components/Settings";
 import { Overview } from "./components/Overview";
 import { Dashboard } from "./components/Dashboard";
 import { Suspense } from "react";
+import { Profile } from "./components/Profile";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { NotFound } from "./components/NotFound";
 /*
   ¿Qué es el enrutamiento dinámico?
   El enrutamiento dinámico permite configurar rutas que acepten
@@ -31,6 +34,9 @@ function App() {
           </li>
           <li>
             <Link to="/dashboard">Dashboard</Link>
+          </li>
+          <li>
+            <Link to="/profile">Profile</Link>
           </li>
         </ul>
       </nav>
@@ -66,6 +72,15 @@ function App() {
             }
           ></Route>
         </Route>
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute isAuthenticated={false}>
+              <Profile />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </div>
   );

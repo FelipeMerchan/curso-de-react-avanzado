@@ -15,6 +15,26 @@ const initialState: State = {
   todos: [],
 };
 
-export const TodoList = () => {
-  return <div>TodoList</div>;
+const todoReducer = (action: Action, state: State) => {
+  switch (action.type) {
+    case "ADD_TODO": {
+      const newTodo: Todo = {
+        id: state.todos.length + 1,
+        text: action.payload,
+      };
+      return { todos: [...state.todos, newTodo] };
+    }
+    case "REMOVE_TODO":
+      return {
+        todos: state.todos.filter((todo) => todo.id !== action.payload),
+      };
+    default:
+      return state;
+  }
+};
+
+const emojiMap: { [key: string]: string } = {
+  eat: "🍔",
+  sleep: "🛌",
+  exercise: "🏋🏼‍♀️",
 };

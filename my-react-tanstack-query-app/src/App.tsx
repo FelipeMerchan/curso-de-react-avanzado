@@ -1,4 +1,4 @@
-import { lazy, useState, useTransition } from "react";
+import { lazy, Suspense, useMemo, useState, useTransition } from "react";
 import "./App.css";
 import { useCourses } from "./hooks/useCourses";
 
@@ -10,13 +10,23 @@ function App() {
   const [isPending, startTransition] = useTransition();
   const { data: courses, isLoading, error } = useCourses();
 
+  const currentCourses = useMemo(() => {
+    if (!courses) return [];
+    const indexOfLastCourse = currentPage * coursesPerPage;
+    const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+    return courses?.slice(indexOfFirstCourse, indexOfLastCourse);
+  }, [courses, currentPage, coursesPerPage]);
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
   if (!courses) return <div>No courses found</div>;
 
   return (
     <section>
-      <CourseList courses={[]} />
+      <h1>Learning Courses</h1>
+      <Suspense fallback={<div>Loading courses...</div>}>
+        <CourseList courses={currentCourses} />
+      </Suspense>
       <div>
         {Array.from(
           { length: Math.ceil(courses.length / coursesPerPage) },

@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 interface Course {
   description: string;
   duration: string;
@@ -5,7 +7,8 @@ interface Course {
   title: string;
 }
 
-const CourseList: React.FC<{ courses: Course[] }> = ({ courses }) => {
+/* Debemos usar React.memo debido a que estamos usando Suspense de React */
+const CourseList: React.FC<{ courses: Course[] }> = memo(({ courses }) => {
   return (
     <ul>
       {courses.map((course) => (
@@ -17,6 +20,6 @@ const CourseList: React.FC<{ courses: Course[] }> = ({ courses }) => {
       ))}
     </ul>
   );
-};
+});
 
 export default CourseList;
